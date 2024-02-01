@@ -10,3 +10,8 @@ on Linux : "build-linux"
 on Windows : "build-windows"
 
 start the .Net solution after the build
+
+## solve NET::ERR_CERT_INVALID error (https issue)
+dotnet dev-certs https --clean
+dotnet dev-certs https --trust
+dotnet dev-certs https --check

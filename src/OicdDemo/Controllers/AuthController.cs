@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
 namespace OicdDemo.Controllers;
@@ -10,20 +12,35 @@ namespace OicdDemo.Controllers;
 [Route("Auth")]
 public class AuthController : Controller
 {
-    [HttpGet("login")]
+    [HttpGet("Login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login(string returnUrl = null)
+    public async Task<IActionResult> Login()
     {
+        if (!User.Identity.IsAuthenticated){
+            string returnUrl = "/";
 
-        return Challenge(new AuthenticationProperties
-        {
-            //RedirectUri = Url.Action("OpenIdLoginCallback"),
-            //Items =
-            //{
-            //    { "returnUrl", returnUrl }
-            //}
-        }, OpenIdConnectDefaults.AuthenticationScheme);
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("/"), //Url.Action("OpenIdLoginCallback")  Url.Action("signin-oidc")
+                Items =
+            {
+                { "returnUrl", returnUrl }
+            },
+                IsPersistent = true,
+            }, OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        return Redirect("/");
     }
+
+    [HttpGet("Logout")]
+    [AllowAnonymous]
+    public async Task<ActionResult> Logout(string returnUrl = null)
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok();
+    }
+
 
     [HttpGet("IsAuthenticated")]
     [AllowAnonymous]

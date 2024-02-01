@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import FileComponent from '../../components/FileComponent/FileComponent';
 import { createFileFromApi } from '../../services/file-service';
 import { getFiles, fetchFilesDataThunk } from '../../redux-resource/file-reducer';
+import  axios from 'axios';
 
 const MainPageComponent = (props) => {
        const fileList = useSelector(getFiles);
@@ -19,6 +20,13 @@ const MainPageComponent = (props) => {
               });
 	};
 
+       const logout = () => {
+              axios(`${process.env.REACT_APP_BACKEND_BASE_URL}Auth/Logout`)
+              .then((response: AxiosResponse) => {
+                     window.location.reload();
+              });
+	};
+
 
        useEffect(() => {
               dispatch(fetchFilesDataThunk());
@@ -28,6 +36,7 @@ const MainPageComponent = (props) => {
               <div class="wrapper">
                      <div class="content">
                      <div class="title">File manager</div>
+                     <button onClick={logout}>Logout</button>
 			<input type="text" value={newFile} onChange={e => setNewFile(e.target.value)}></input>
 			<button onClick={clickNewFile}>Add file</button>
                      <br/>

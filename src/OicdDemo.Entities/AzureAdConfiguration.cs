@@ -13,4 +13,5 @@ public class AzureAdConfiguration
     public string Audience { get; set; }
     public string Authority { get; set; }
     public string ReturnUrl { get; set; }
+    public string MetadataAddress { get; set; }
 }
