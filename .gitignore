@@ -1,0 +1,11 @@
+﻿################################################################################
+# Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/src/.vs
+/src/OicdDemo/bin/Debug/net6.0
+/src/OicdDemo/client-app/node_modules
+/src/OicdDemo/obj
+/src/OicdDemo.Entities/obj
+/src/OicdDemo.Entities/bin/Debug/net6.0
