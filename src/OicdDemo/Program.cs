@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using OicdDemo.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection.Metadata.Ecma335;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ClientId = azureSettings.ClientId;
         options.ClientSecret = azureSettings.ClientSecret;
         options.MetadataAddress = azureSettings.MetadataAddress;
+        options.ReturnUrlParameter = azureSettings.ReturnUrl;
 
         options.ResponseType = "code";
         options.SaveTokens = true;
@@ -41,6 +43,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddScoped((serviceProvider) => azureSettings);
 
 // Add services to the container.
 builder.Services.AddControllers();

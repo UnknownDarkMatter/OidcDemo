@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OicdDemo.Entities;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
@@ -12,6 +13,13 @@ namespace OicdDemo.Controllers;
 [Route("Auth")]
 public class AuthController : Controller
 {
+    private readonly AzureAdConfiguration _azureAdConfiguration;
+
+    public AuthController(AzureAdConfiguration azureAdConfiguration)
+    {
+        _azureAdConfiguration = azureAdConfiguration;
+    }
+
     [HttpGet("Login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login()
@@ -21,10 +29,10 @@ public class AuthController : Controller
 
             return Challenge(new AuthenticationProperties
             {
-                RedirectUri = Url.Action("/"), //Url.Action("OpenIdLoginCallback")  Url.Action("signin-oidc")
+                RedirectUri = _azureAdConfiguration.ReturnUrl, //Url.Action("/"), //Url.Action("OpenIdLoginCallback")  Url.Action("signin-oidc")
                 Items =
             {
-                { "returnUrl", returnUrl }
+                { "returnUrl", _azureAdConfiguration.ReturnUrl }
             },
                 IsPersistent = true,
             }, OpenIdConnectDefaults.AuthenticationScheme);
